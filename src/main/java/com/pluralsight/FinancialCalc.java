@@ -56,7 +56,7 @@ public class FinancialCalc {
         double monthlyPayment = calcMonthlyPayment(principal, interestRate, years);
         double totalInterest = (monthlyPayment * years * 12) - principal;
         System.out.printf(
-                "$%.2f loan at %f%% interest for %f years would have a $%.2f/mo payment with a total interest of $%.2f%n",
+                "$%.2f loan at %.3f%% interest for %.1f years would have a $%.2f/mo payment with a total interest of $%.2f%n",
                 principal, interestRate, years, monthlyPayment, totalInterest
         );
     }
@@ -75,7 +75,7 @@ public class FinancialCalc {
         double totalInterest = value - deposit;
 
         System.out.printf(
-                "If you deposit $%.2f in a CD that earns %f%% interest and matures in %f years," +
+                "If you deposit $%.2f in a CD that earns %.3f%% interest and matures in %.1f years," +
                 " your CD's ending balance will be $%.2f and you would have earned $%.2f in interest%n",
                 deposit, interestRate, years, value, totalInterest
         );
@@ -94,7 +94,7 @@ public class FinancialCalc {
         double value = calcInvestAmount(payout, interestRate, years);
 
         System.out.printf(
-                "To fund an annuity that pays $%.2f monthly for %f years and earns an expected %f%% interest," +
+                "To fund an annuity that pays $%.2f monthly for %.1f years and earns an expected %.3f%% interest," +
                 " you would need to invest $%.2f today.",
                 payout, years, interestRate, value
         );
@@ -104,7 +104,7 @@ public class FinancialCalc {
     public static double calcMonthlyPayment(double principal, double rate, double years) {
         // interest rate converted to a decimal from percent
         // interest rate multiplied by number of months in a year
-        double monthlyInterestRate = (rate * 12) / 100;
+        double monthlyInterestRate = rate / (12*100);
         double months = years * 12;
 
         // (1 + i)^n)
@@ -118,14 +118,14 @@ public class FinancialCalc {
     public static double calcEndingBalance(double deposit, double rate, double years) {
         // FV = P × (1 + (r / d))^n
         int daysInYear = 365;
-        return deposit * Math.pow(( 1 + (rate / daysInYear)), years * daysInYear);
+        return deposit * Math.pow(( 1 + ((rate / 100) / daysInYear)), years * daysInYear);
     }
 
     // Calculates the present value invested required for annuityCalc
     public static double calcInvestAmount(double payout, double rate, double years) {
         // PV = C * ( (1-(1+i)^-n)/ i )
         double numPayments = years * 12;
-        return payout * ((1 - Math.pow(1 + rate, 0 - numPayments)) / rate);
+        return payout * ((1 - Math.pow((rate / 1200) + 1, 0 - numPayments)) / (rate / 1200));
     }
 
     // Prompts the user for a positive double
